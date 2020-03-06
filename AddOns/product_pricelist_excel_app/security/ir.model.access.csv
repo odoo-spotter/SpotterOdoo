@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pricelist_config_user,access.pricelist.config,model_pricelist_config,,1,1,1,1

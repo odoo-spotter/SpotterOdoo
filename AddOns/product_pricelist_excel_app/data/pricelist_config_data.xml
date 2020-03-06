@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="pricelist_excel_config_data_1" model="pricelist.config">
+            <field name="name">Simple Product PriceList</field>
+            <field name="template_type">template_1</field>
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="file_name"></field>
+            <field name="sheet_name">Simple Product PriceList</field>
+            <field name="header_location">A5:J5</field>
+            <field name="is_company" eval="True" />
+            <field name="company_cell_location">A1:J4</field>
+            <field name="is_currency" eval="True" />
+            <field name="currency_cell_location">J6:J6</field>
+            <field name="is_date" eval="True" />
+            <field name="date_cell_location">J7:J7</field>
+
+            <!-- Extra Feature -->
+            <field name="is_product_code" eval="True" />
+            <field name="product_code_cell_location">A8:A8</field>
+            <field name="is_product_name" eval="True" />
+            <field name="product_name_location">B8:B8</field>
+            <field name="is_product_attributes" eval="True" />
+            <field name="product_attributes_cell_location">C8:C8</field>
+            <field name="is_product_taxes" eval="True" />
+            <field name="product_taxes_cell_location">D8:D8</field>
+            <field name="is_product_uom" eval="True" />
+            <field name="product_uom_cell_location">E8:E8</field>
+
+            <!-- Quantity -->
+            <field name="qty_count">five</field>
+            <field name="qty_count_one" eval="True" />
+            <field name="qty_count_two" eval="True" />
+            <field name="qty_count_three" eval="True" />
+            <field name="qty_count_four" eval="True" />
+            <field name="qty_count_five" eval="True" />
+            <field name="qty1_cell_location">F8:F8</field>
+            <field name="qty2_cell_location">G8:G8</field>
+            <field name="qty3_cell_location">H8:H8</field>
+            <field name="qty4_cell_location">I8:I8</field>
+            <field name="qty5_cell_location">J8:J8</field>
+        </record>
+
+        <record id="pricelist_excel_config_data_2" model="pricelist.config">
+            <field name="name">Product Public PriceList-Extra Features</field>
+            <field name="template_type">template_2</field>
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="file_name"></field>
+            <field name="sheet_name">Product Public PriceList-Extra Features</field>
+            <field name="header_location">A5:Q5</field>
+            <field name="is_company" eval="True" />
+            <field name="company_cell_location">A1:Q4</field>
+            <field name="is_currency" eval="True" />
+            <field name="currency_cell_location">Q6:Q6</field>
+            <field name="is_date" eval="True" />
+            <field name="date_cell_location">Q7:Q7</field>
+
+            <!-- Extra Feature -->
+            <field name="is_product_code" eval="True" />
+            <field name="product_code_cell_location">A8:A8</field>
+            <field name="is_product_name" eval="True" />
+            <field name="product_name_location">B8:B8</field>
+            <field name="is_product_attributes" eval="True" />
+            <field name="product_attributes_cell_location">C8:C8</field>
+            <field name="is_product_taxes" eval="True" />
+            <field name="product_taxes_cell_location">D8:D8</field>
+            <field name="is_product_uom" eval="True" />
+            <field name="product_uom_cell_location">E8:E8</field>
+            <field name="is_product_qty_case" eval="True" />
+            <field name="product_qty_case_cell_location">K8:K8</field>
+            <field name="is_product_on_hand" eval="True" />
+            <field name="product_on_hand_cell_location">L8:L8</field>
+            <field name="is_product_ean" eval="True" />
+            <field name="product_ean_cell_location">M8:M8</field>
+            <field name="is_product_weight" eval="True" />
+            <field name="product_weight_cell_location">N8:N8</field>
+            <field name="is_product_volume" eval="True" />
+            <field name="product_volume_cell_location">O8:O8</field>
+            <field name="is_product_description" eval="True" />
+            <field name="product_description_cell_location">P8:P8</field>
+            <field name="is_product_lead_time" eval="True" />
+            <field name="product_lead_time_cell_location">Q8:Q8</field>
+
+            <!-- Quantity -->
+            <field name="qty_count">five</field>
+            <field name="qty_count_one" eval="True" />
+            <field name="qty_count_two" eval="True" />
+            <field name="qty_count_three" eval="True" />
+            <field name="qty_count_four" eval="True" />
+            <field name="qty_count_five" eval="True" />
+            <field name="qty1_cell_location">F8:F8</field>
+            <field name="qty2_cell_location">G8:G8</field>
+            <field name="qty3_cell_location">H8:H8</field>
+            <field name="qty4_cell_location">I8:I8</field>
+            <field name="qty5_cell_location">J8:J8</field>
+        </record>
+
+        <record id="pricelist_excel_config_data_3" model="pricelist.config">
+            <field name="name">Product Public PriceList And Company Logo With Extra Features</field>
+            <field name="template_type">template_3</field>
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="file_name"></field>
+            <field name="sheet_name">Public PriceList-Company Logo-Extra Features</field>
+            <field name="header_location">A5:S5</field>
+
+            <!-- Company Logo -->
+            <field name="is_company_logo" eval="True" />
+            <field name="company_logo_cell_location">A1:A1</field>
+            <field name="company_logo_img_width">100.00</field>
+            <field name="company_logo_img_height">150.00</field>
+            <field name="company_logo_cell_width">50.00</field>
+            <field name="company_logo_cell_height">75.00</field>
+
+            <field name="is_currency" eval="True" />
+            <field name="currency_cell_location">S6:S6</field>
+            <field name="is_date" eval="True" />
+            <field name="date_cell_location">S7:S7</field>
+
+            <!-- Extra Feature -->
+            <field name="is_product_code" eval="True" />
+            <field name="product_code_cell_location">A8:A8</field>
+            <field name="is_product_name" eval="True" />
+            <field name="product_name_location">B8:B8</field>
+            <field name="is_product_attributes" eval="True" />
+            <field name="product_attributes_cell_location">C8:C8</field>
+            <field name="is_product_taxes" eval="True" />
+            <field name="product_taxes_cell_location">D8:D8</field>
+            <field name="is_product_uom" eval="True" />
+            <field name="product_uom_cell_location">E8:E8</field>
+
+            <field name="is_product_retail_price" eval="True" />
+            <field name="product_retail_price_cell_location">F8:F8</field>
+            <field name="is_product_wholesale_price" eval="True" />
+            <field name="product_wholesale_price_cell_location">G8:G8</field>
+
+            <field name="is_product_qty_case" eval="True" />
+            <field name="product_qty_case_cell_location">M8:M8</field>
+            <field name="is_product_on_hand" eval="True" />
+            <field name="product_on_hand_cell_location">N8:N8</field>
+            <field name="is_product_ean" eval="True" />
+            <field name="product_ean_cell_location">O8:O8</field>
+            <field name="is_product_weight" eval="True" />
+            <field name="product_weight_cell_location">P8:P8</field>
+            <field name="is_product_volume" eval="True" />
+            <field name="product_volume_cell_location">Q8:Q8</field>
+            <field name="is_product_description" eval="True" />
+            <field name="product_description_cell_location">R8:R8</field>
+            <field name="is_product_lead_time" eval="True" />
+            <field name="product_lead_time_cell_location">S8:S8</field>
+
+            <!-- Quantity -->
+            <field name="qty_count">five</field>
+            <field name="qty_count_one" eval="True" />
+            <field name="qty_count_two" eval="True" />
+            <field name="qty_count_three" eval="True" />
+            <field name="qty_count_four" eval="True" />
+            <field name="qty_count_five" eval="True" />
+            <field name="qty1_cell_location">H8:H8</field>
+            <field name="qty2_cell_location">I8:I8</field>
+            <field name="qty3_cell_location">J8:J8</field>
+            <field name="qty4_cell_location">K8:K8</field>
+            <field name="qty5_cell_location">L8:L8</field>
+        </record>
+
+    </data>
+</odoo>

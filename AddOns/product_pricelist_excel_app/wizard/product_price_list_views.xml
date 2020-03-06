@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--   Product Price List -->
+    <record model="ir.ui.view" id="excel_product_price_list_view">
+        <field name="name">excel.product.price.list.view</field>
+        <field name="model">product.price_list</field>
+        <field name="inherit_id" ref="product.view_product_price_list"/>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <field name="qty1" position="before">
+                <field name="template_type" required="1" />
+                <field name="configuration_id" required="1" options="{'no_open': True, 'no_create_edit': True}"/>
+            </field>
+            <button name="print_report" position="after">
+                <button name="print_excel" string="Excel"  type="object" class="btn-primary"/>
+            </button>
+        </field>
+    </record>
+
+</odoo>
