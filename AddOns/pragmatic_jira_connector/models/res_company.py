@@ -13,47 +13,47 @@ class Jira_Config_Settings(models.Model):
     _description = 'Jira Configuration'
     
     name = fields.Char(default='Jira Settings')
-    url = fields.Char('Instance URL')
-    login = fields.Char()
+    jira_url = fields.Char('Instance URL')
+    jira_login = fields.Char()
     password = fields.Char(string ='Jira Token')
 
 
     def get(self, request, path='/rest/api/latest/', check=True):
-        response = requests.get(self.url + path + request, auth=(self.login, self.password))
+        response = requests.get(self.jira_url + path + request, auth=(self.jira_login, self.password))
         if check:
             self.check_response(response)
         return response
 
-    def get_file(self, url):
-        print('Request For GET', url)
-        response = requests.get(url, auth=(self.login, self.password), stream=True)
+    def get_file(self, jira_url):
+        print('Request For GET', jira_url)
+        response = requests.get(jira_url, auth=(self.jira_login, self.password), stream=True)
         self.check_response(response)
         return response
 
     def post(self, request, rdata=dict(), path='/rest/api/latest/'):
-        print('Request For POST', self.url + path + request, rdata)
-        response = requests.post(self.url + path + request, auth=(self.login, self.password), json=rdata)
+        print('Request For POST', self.jira_url + path + request, rdata)
+        response = requests.post(self.jira_url + path + request, auth=(self.jira_login, self.password), json=rdata)
         self.check_response(response)
         return response
 
     def post_file(self, request, filename, filepath):
-        print('Request For POST', self.url + '/rest/api/latest/' + request)
+        print('Request For POST', self.jira_url + '/rest/api/latest/' + request)
         attachment = open(filepath, "rb")
-        response = requests.post(self.url + '/rest/api/latest/' + request, auth=(self.login, self.password),
+        response = requests.post(self.jira_url + '/rest/api/latest/' + request, auth=(self.jira_login, self.password),
             files={'file': (filename, attachment, 'application/octet-stream')},
             headers={'content-type': None, 'X-Atlassian-Token': 'nocheck'})
         self.check_response(response)
         return response
 
     def put(self, request, rdata=dict(), path='/rest/api/latest/'):
-        print('Request For PUT', self.url + path + request, rdata)
-        response = requests.put(self.url + path + request, auth=(self.login, self.password), json=rdata)
+        print('Request For PUT', self.jira_url + path + request, rdata)
+        response = requests.put(self.jira_url + path + request, auth=(self.jira_login, self.password), json=rdata)
         self.check_response(response)
         return response
     
     def delete(self, request, path='/rest/api/latest/'):
-        print('Request For DELETE', self.url + path + request)
-        response = requests.delete(self.url + path + request, auth=(self.login, self.password))
+        print('Request For DELETE', self.jira_url + path + request)
+        response = requests.delete(self.jira_url + path + request, auth=(self.jira_login, self.password))
         self.check_response(response)
         return response
 
@@ -145,13 +145,13 @@ class Jira_Config_Settings(models.Model):
         for model in models:
             self.env[model].receive_all()
 
-    @api.constrains('url')
-    def constrains_url(self):
-        if not self.url:
+    @api.constrains('jira_url')
+    def constrains_jira_url(self):
+        if not self.jira_url:
             return
-        if not self.url.startswith('http://') and not self.url.startswith('https://'):
+        if not self.jira_url.startswith('http://') and not self.jira_url.startswith('https://'):
             raise exceptions.Warning('Url must start with http:// or https://')
-        if self.url.endswith('/'):
-            self.url = self.url[:-1]
+        if self.jira_url.endswith('/'):
+            self.jira_url = self.jira_url[:-1]
 
     

@@ -22,8 +22,8 @@
 						<page name="credentials" string="Credentials">
 							<group string="Credentials">
 								<group name="Credential">
-									<field name="url" required="1" />
-									<field name="login" required="1" />
+									<field name="jira_url" required="1" />
+									<field name="jira_login" required="1" />
 									<field name="password" required="1" password="True" />
 								</group>
 
