@@ -25,19 +25,19 @@ class Jira_Config_Settings(models.Model):
         return response
 
     def get_file(self, jira_url):
-        print('Request For GET', jira_url)
+#         print('Request For GET', jira_url)
         response = requests.get(jira_url, auth=(self.jira_login, self.password), stream=True)
         self.check_response(response)
         return response
 
     def post(self, request, rdata=dict(), path='/rest/api/latest/'):
-        print('Request For POST', self.jira_url + path + request, rdata)
+#         print('Request For POST', self.jira_url + path + request, rdata)
         response = requests.post(self.jira_url + path + request, auth=(self.jira_login, self.password), json=rdata)
         self.check_response(response)
         return response
 
     def post_file(self, request, filename, filepath):
-        print('Request For POST', self.jira_url + '/rest/api/latest/' + request)
+#         print('Request For POST', self.jira_url + '/rest/api/latest/' + request)
         attachment = open(filepath, "rb")
         response = requests.post(self.jira_url + '/rest/api/latest/' + request, auth=(self.jira_login, self.password),
             files={'file': (filename, attachment, 'application/octet-stream')},
@@ -46,13 +46,13 @@ class Jira_Config_Settings(models.Model):
         return response
 
     def put(self, request, rdata=dict(), path='/rest/api/latest/'):
-        print('Request For PUT', self.jira_url + path + request, rdata)
+#         print('Request For PUT', self.jira_url + path + request, rdata)
         response = requests.put(self.jira_url + path + request, auth=(self.jira_login, self.password), json=rdata)
         self.check_response(response)
         return response
     
     def delete(self, request, path='/rest/api/latest/'):
-        print('Request For DELETE', self.jira_url + path + request)
+#         print('Request For DELETE', self.jira_url + path + request)
         response = requests.delete(self.jira_url + path + request, auth=(self.jira_login, self.password))
         self.check_response(response)
         return response

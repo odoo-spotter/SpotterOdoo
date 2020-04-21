@@ -1,10 +1,10 @@
 {
     'name': 'Odoo Jira Connector',
-    'version': '13.0.2',
+    'version': '13.0.0.3',
     'author': 'Pragmatic TechSoft Pvt Ltd.',
     'website': 'http://www.pragtech.co.in',
     'category': 'Project',
-    'summary': 'Synchronise data between Odoo and Jira odoo jira odoo connector jira connector odoo task bug jira task issue ',
+    'summary': 'Synchronise data between Odoo and Jira.',
     'description': """
     Odoo Jira Connector
     =======================================

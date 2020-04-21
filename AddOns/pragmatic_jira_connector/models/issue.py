@@ -51,9 +51,9 @@ class JiraIssue(models.Model):
         if self.description:
             jira_dict['fields']['description'] = html2text.html2text(self.description)
         if self.user_id:
-            jira_dict['fields']['assignee'] = dict(name=self.env['res.users'].browse(self.user_id.id).jira_id)
+            jira_dict['fields']['assignee'] = dict(id=self.env['res.users'].browse(self.user_id.id).jira_accountId)
         if self.reporter_id:
-            jira_dict['fields']['reporter'] = dict(name=self.env['res.users'].browse(self.reporter_id.id).jira_id)
+            jira_dict['fields']['reporter'] = dict(id=self.env['res.users'].browse(self.reporter_id.id).jira_accountId)
         if self.priority_id:
             jira_dict['fields']['priority'] = dict(id=self.env['issue.priority'].browse(self.priority_id.id).jira_id)
         if self.tag_ids:
@@ -156,7 +156,7 @@ class JiraIssue(models.Model):
         issue = self.search([('key', '=', response['key'])])
         if issue:
             if issue.jira_update == fields.Datetime.to_string(parser.parse(response['fields']['updated'])):
-                print('SKIP')
+#                 print('SKIP')
                 return issue
         if response['fields']['created'] :
             jira_create_date =parser.parse(response['fields']['created']).strftime("%Y-%m-%d %H:%M:%S")
@@ -204,10 +204,10 @@ class JiraIssue(models.Model):
         issue = self.search([('key', '=', issue_dict['key'])])
         if not issue:
             issue = self.create(issue_dict)
-            print('Issue Get CREATE', jira_update, issue.key)
+#             print('Issue Get CREATE', jira_update, issue.key)
         else:
             issue.write(issue_dict)
-            print('Issue Get UPDATE', jira_update, issue.key)
+#             print('Issue Get UPDATE', jira_update, issue.key)
         if update:
             self.env['res.company'].search([],limit=1).updated = jira_update.date()
 
@@ -240,16 +240,17 @@ class JiraIssue(models.Model):
 
     @api.onchange('jira_project')
     def onchange_context(self):
+        print("\n\n\n\nhellooooooooooooooooooooooooooooooooooooo")
         if self.jira_project:
-            if self.user_id and not self.user_id.jira_id:
+            if self.user_id and not self.user_id.jira_accountId:
                 self.user_id = False
-            if self.reporter_id and not self.reporter_id.jira_id:
+            if self.reporter_id and not self.reporter_id.jira_accountId:
                 self.reporter_id = False
-            if self.creator_id and not self.creator_id.jira_id:
+            if self.creator_id and not self.creator_id.jira_accountId:
                 self.creator_id = False
-            return {'domain': {'user_id': [('jira_id', '!=', False)],
-                               'reporter_id': [('jira_id', '!=', False)],
-                               'creator_id': [('jira_id', '!=', False)]}}
+            return {'domain': {'user_id': [('jira_accountId', '!=', False)],
+                               'reporter_id': [('jira_accountId', '!=', False)],
+                               'creator_id': [('jira_accountId', '!=', False)]}}
         else:
             return {'domain': {'user_id': [],
                                'reporter_id': [],

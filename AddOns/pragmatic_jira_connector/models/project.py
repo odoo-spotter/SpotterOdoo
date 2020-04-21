@@ -9,6 +9,7 @@ class JiraProject(models.Model):
     _inherit = 'project.project'
 
     def create_jira_dict(self, vals):
+#         print("\n\ncreate_jira_dict===============",vals,vals['user_id'])
         project_dict = dict()
         if 'name' in vals:
             project_dict['name'] = vals['name']
@@ -17,7 +18,7 @@ class JiraProject(models.Model):
         if 'project_type_id' in vals:
             project_dict['projectTypeKey'] = self.env['jira.type'].browse(vals['project_type_id']).key
         if 'user_id' in vals:
-            project_dict['lead'] = self.env['res.users'].browse(vals['user_id']).jira_id
+            project_dict['lead'] = self.env['res.users'].browse(vals['user_id']).jira_accountId
         if 'project_template_id' in vals:
             project_dict['projectTemplateKey'] = self.env['jira.project.template'].browse(vals['project_template_id']).key
         if 'description' in vals:
@@ -44,6 +45,7 @@ class JiraProject(models.Model):
         response = False
         if 'disable_mail_mail' not in self.env.context and 'jira_project' in vals and vals['jira_project']:
             project_dict = self.create_jira_dict(vals)
+#             print("project_dict===============",project_dict)
             response = self.env['res.company'].search([],limit=1).post('project', project_dict)
             vals['jira_id'] = response.json()['id']
 
@@ -58,7 +60,6 @@ class JiraProject(models.Model):
         if 'disable_mail_mail' not in self.env.context and self.jira_id:
             project_dict = self.create_jira_dict(vals)
             if project_dict:
-                print("\n\n\n11111111111111111111111111111111111111111111111")
                 response = self.env['res.company'].search([],limit=1).put('project/' + self.jira_id, project_dict)
         return output
 
@@ -78,6 +79,7 @@ class JiraProject(models.Model):
             self.process_response(self.env['res.company'].search([],limit=1).get('project/' + p['key']).json())
 
     def process_response(self, response):
+#         print("\n\n============",response['lead'])
         project_dict = dict(
             jira_id=response['id'],
             key=response['key'],
@@ -107,7 +109,7 @@ class JiraProject(models.Model):
         for t in types:
             type_ids.append(self.env['project.task.type'].jira_dict(t).id)
         project_dict['type_ids'] = [(6, 0, type_ids)]
-
+#         print("\n\n===============",project_dict)
         project = self.search([('key', '=', project_dict['key'])])
         if not project:
             project = self.create(project_dict)
