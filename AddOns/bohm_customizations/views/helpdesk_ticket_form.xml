@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="helpdesk_ticket_view_form_inherit_stock_user_custom" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.repair.stock.user.custom</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" name="action_view_rma_receipts" icon="fa-truck"
+                    type="object" attrs="{'invisible': [('x_repair_pickings_count', '=', 0)]}" > 
+                    <field name="x_repair_pickings_count" string="RMA Receipts" widget="statinfo" />
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+     <record id="helpdesk_ticket_view_form_inherit_stock_user_custom_top" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.repair.stock.user.custom.top</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_repair.helpdesk_ticket_view_form_inherit_stock_user"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(helpdesk_repair.action_repair_order_form)d']" position="replace">
+                <button name="action_repair_receive" type="object"
+                    groups="stock.group_stock_user"
+                    string="Repair" attrs="{'invisible': [('use_product_repairs', '=', False)]}" />
+            </xpath>            
+        </field>
+    </record>
+</odoo>

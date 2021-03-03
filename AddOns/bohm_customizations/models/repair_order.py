@@ -31,3 +31,33 @@ class CustomRepairOrder(models.Model):
 
     def set_to_draft(self):
         self.state = 'draft'
+
+    def create_return_delivery(self):
+        if self.ticket_id:
+            picking_type = self.env['stock.picking.type'].search(
+                [('name', 'ilike', 'Delivery')], limit=1)
+            location_dest_id = self.env['stock.location'].search(
+                [('name', 'ilike', 'Customers'), ('usage', '=', 'customer')], limit=1)
+
+            picking_vals = {
+                'picking_type_id': picking_type.id,
+                'partner_id': self.address_id.id,
+                'location_id': self.location_id.id,
+                'location_dest_id': location_dest_id.id,
+                'x_ticket_id': self.ticket_id.id,
+                'x_studio_field_oB3Pu': self.id
+            }
+
+            picking_id = self.env['stock.picking'].create(picking_vals)
+            self.message_post(body=_(
+                'The Return Delvery Order <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a> has been created.') % (picking_id.id, picking_id.name))
+            
+            if self.product_id.tracking == 'serial':
+                move = self.env['stock.move']
+
+                if self.lot_id:
+                    move.picking_create_move(
+                        picking_id,  self.product_id, 1, self.location_id, location_dest_id, self.lot_id)
+                else:
+                    move.picking_create_move(
+                        picking_id,  self.product_id, 1, self.location_id, location_dest_id)
