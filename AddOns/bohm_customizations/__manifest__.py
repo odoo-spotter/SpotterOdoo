@@ -13,7 +13,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/repair_order_form.xml',
-        'views/crm_lead_form.xml'
+        'views/crm_lead_form.xml',
+        'views/product_attribute.xml'
     ],
     'application': True,
 }
