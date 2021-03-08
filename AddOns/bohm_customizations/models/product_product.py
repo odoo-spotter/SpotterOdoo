@@ -56,7 +56,7 @@ class CustomProductProduct(models.Model):
                         elif 'designator' in attr.attribute_id.name.lower():
                             designator = '-' + str(attr.x_code.strip())
 
-                    default_code = '%s%s%s' % (str(record.name),
+                    default_code = '%s%s%s' % (str(record.name.strip()),
                                                machine_learning, designator)
                     record.update({
                         'default_code': default_code
