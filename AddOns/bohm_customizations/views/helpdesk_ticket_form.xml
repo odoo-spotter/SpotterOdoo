@@ -9,7 +9,7 @@
             <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
                 <button class="oe_stat_button" name="action_view_rma_receipts" icon="fa-truck"
                     type="object" attrs="{'invisible': [('x_repair_pickings_count', '=', 0)]}" > 
-                    <field name="x_repair_pickings_count" string="RMA Receipts" widget="statinfo" />
+                    <field name="x_repair_pickings_count" string="Receipts" widget="statinfo" />
                 </button>
             </xpath>
         </field>

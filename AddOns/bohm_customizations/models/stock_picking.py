@@ -13,3 +13,13 @@ class CustomStockPicking(models.Model):
 
     x_ticket_id = fields.Many2one(
         'helpdesk.ticket', string='Linked Ticket', ondelete="set null")
+
+
+    def button_validate(self):
+        res = super(CustomStockPicking, self)
+        
+        delivery_type = self.env['stock.picking.type'].search([('name', 'ilike', 'Delivery')], limit=1)
+        if not self.carrier_tracking_ref and self.picking_type_id.id == delivery_type.id:
+            raise ValidationError(_('Please supply the Tracking Reference in the Additional Info tab for this order.'))
+
+        return res

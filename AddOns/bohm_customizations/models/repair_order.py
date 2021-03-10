@@ -3,6 +3,7 @@ import logging
 import datetime
 
 from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -32,6 +33,35 @@ class CustomRepairOrder(models.Model):
     def set_to_draft(self):
         self.state = 'draft'
 
+    def action_validate(self):
+        self.ensure_one()
+        res = super(CustomRepairOrder, self).action_validate()
+        errors = []
+
+        if len(self.fees_lines) == 0 and len(self.operations) == 0:
+            errors.append(
+                '- You must add Parts or Operations to proceed with this repair.')
+
+        if self.ticket_id:
+            return_receipt = self.env['stock.picking'].search([
+                ('x_ticket_id', '=', self.ticket_id.id),
+                ('state', 'not in', ['cancel', 'done']),
+                ('picking_type_id', '=', self.env['stock.picking.type'].search(
+                    [('name', 'ilike', 'RMA')], limit=1).id)
+            ])
+
+            if return_receipt:
+                errors.append('- ' + str(return_receipt.name) +
+                              ' has not been received. Please receive this return to proceed with this repair.')
+
+        if len(errors):
+            msg = 'Please correct the following:\n'
+            for error in errors:
+                msg += '\n' + str(error)
+
+            raise ValidationError(msg)
+        return res
+
     def create_return_delivery(self):
         if self.ticket_id:
             picking_type = self.env['stock.picking.type'].search(
@@ -51,7 +81,7 @@ class CustomRepairOrder(models.Model):
             picking_id = self.env['stock.picking'].create(picking_vals)
             self.message_post(body=_(
                 'The Return Delvery Order <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a> has been created.') % (picking_id.id, picking_id.name))
-            
+
             if self.product_id.tracking == 'serial':
                 move = self.env['stock.move']
 
