@@ -11,6 +11,47 @@ class CustomResPartner(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
 
+    @api.model
+    def create(self, vals):
+        try:
+            parent_id = vals.get('parent_id')
+            if parent_id:
+                parent = self.search([('id', '=', parent_id)])
+                vals['x_studio_customer_type'] = parent.x_studio_customer_type
+                vals['x_studio_vertical'] = parent.x_studio_vertical
+                vals['team_id'] = parent.team_id.id
+        except:
+            pass
+
+        return super(CustomResPartner, self).create(vals)
+
+    @api.onchange('x_studio_customer_type')
+    def update_child_type(self):
+        try:
+            for record in self._origin:
+                for child in record.child_ids:
+                    child.x_studio_customer_type = self.x_studio_customer_type
+        except:
+            pass
+    
+    @api.onchange('x_studio_vertical')
+    def update_child_vertical(self):
+        try:
+            for record in self._origin:
+                for child in record.child_ids:
+                    child.x_studio_vertical = self.x_studio_vertical
+        except:
+            pass
+    
+    @api.onchange('team_id')
+    def update_child_team(self):
+        try:
+            for record in self._origin:
+                for child in record.child_ids:
+                    child.team_id = self.team_id
+        except:
+            pass
+    
     def get_opp_domain(self, partner):
         domain = []
         if not partner.id:
@@ -69,9 +110,9 @@ class CustomResPartner(models.Model):
         else:
             domain.insert(0, '|')
             domain.append(('x_studio_end_user.id', '=', partner.id))
-        
+
         return domain
-    
+
     def _compute_opportunity_count(self):
         for partner in self:
             domain = self.get_opp_domain(partner)
