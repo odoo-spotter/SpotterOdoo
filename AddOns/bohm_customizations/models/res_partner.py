@@ -60,7 +60,7 @@ class CustomResPartner(models.Model):
             domain.insert(0, '|')
             domain.append(('x_studio_end_user.id', '=', partner.id))
             domain.insert(0, '|')
-            domain.append(('x_studio_end_user', 'child_of', partner.parent_id.id))
+            domain.append(('x_studio_end_user', 'child_of', partner.id))
         elif partner.parent_id:
             domain.insert(0, '|')
             domain.append(('x_studio_end_user.id', '=', partner.id))
