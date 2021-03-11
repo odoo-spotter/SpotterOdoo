@@ -32,6 +32,9 @@ class CustomProductProduct(models.Model):
                     designator = ''
 
                     for attr in record.product_template_attribute_value_ids:
+                        if not attr.x_code:
+                            raise ValidationError(
+                                'The attribute %s is missing a code. Please fill this out in the Attribute Settings under the Configuration tab above.' % attr.attribute_id.name)
                         if 'interface' in attr.attribute_id.name.lower():
                             interface = '-' + str(attr.x_code.strip())
                         elif 'color' in attr.attribute_id.name.lower():
@@ -47,17 +50,23 @@ class CustomProductProduct(models.Model):
                     })
 
                 elif record.categ_id.name.lower() == 'nio':
+                    connections = ''
                     machine_learning = ''
                     designator = ''
 
                     for attr in record.product_template_attribute_value_ids:
-                        if 'machine' in attr.attribute_id.name.lower():
+                        if not attr.x_code:
+                            raise ValidationError(
+                                'The attribute %s is missing a code. Please fill this out in the Attribute Settings under the Configuration tab above.' % attr.attribute_id.name)
+                        if 'connections' in attr.attribute_id.name.lower():
+                            connections = '-' + str(attr.x_code.strip())
+                        elif 'machine' in attr.attribute_id.name.lower():
                             machine_learning = '-' + str(attr.x_code.strip())
                         elif 'designator' in attr.attribute_id.name.lower():
                             designator = '-' + str(attr.x_code.strip())
 
-                    default_code = '%s%s%s' % (str(record.name.strip()),
-                                               machine_learning, designator)
+                    default_code = '%s%s%s%s' % (str(record.name.strip()), connections,
+                                                 machine_learning, designator)
                     record.update({
                         'default_code': default_code
                     })
