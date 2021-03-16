@@ -24,9 +24,24 @@ class CustomDocumentsDocument(models.Model):
         string="Previous Version"
     )
 
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('pending', 'Pending Approval'),
+        ('approved', 'Approved')
+    ], 'Status', default='draft', index=True, required=True, copy=False, tracking=True)
+
     @api.depends('x_previous_version')
     def _compute_version(self):
         if self.x_previous_version:
             self.x_version = self.x_previous_version.x_version + 1
         else:
             self.x_version = 1.0
+
+    def action_draft(self):
+        self.state = 'draft'
+    
+    def action_submit_approval(self):
+        self.state = 'pending'
+    
+    def action_approved(self):
+        self.state = 'approved'
