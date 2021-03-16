@@ -81,7 +81,7 @@ class CustomResPartner(models.Model):
 
     def get_opp_domain(self, partner):
         domain = []
-        if not partner.id or partner.x_studio_limit_portal_access:
+        if not partner.id:
             return [('id', '=', False)]
         if partner.is_company:
             domain = [
