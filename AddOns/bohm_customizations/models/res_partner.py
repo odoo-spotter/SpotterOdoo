@@ -11,6 +11,74 @@ class CustomResPartner(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
 
+    @api.model
+    def create(self, vals):
+        try:
+            parent_id = vals.get('parent_id')
+            if parent_id:
+                parent = self.search([('id', '=', parent_id)])
+                if not vals.get('x_studio_customer_type'):
+                    vals['x_studio_customer_type'] = parent.x_studio_customer_type
+                if not vals.get('x_studio_vertical'):
+                    vals['x_studio_vertical'] = parent.x_studio_vertical
+                if not vals.get('team_id'):
+                    vals['team_id'] = parent.team_id.id
+        except:
+            pass
+
+        return super(CustomResPartner, self).create(vals)
+
+    @api.onchange('x_studio_customer_type')
+    def update_child_type(self):
+        try:
+            for record in self:
+                origin = record._origin
+                for child in origin.child_ids:
+                    child.x_studio_customer_type = record.x_studio_customer_type
+        except:
+            pass
+    
+    @api.onchange('x_studio_vertical')
+    def update_child_vertical(self):
+        try:
+            for record in self:
+                origin = record._origin
+                for child in origin.child_ids:
+                    child.x_studio_vertical = record.x_studio_vertical
+        except:
+            pass
+    
+    @api.onchange('team_id')
+    def update_child_team(self):
+        try:
+            for record in self:
+                origin = record._origin
+                for child in origin.child_ids:
+                    child.team_id = record.team_id
+        except:
+            pass
+    
+    def _compute_opportunity_count(self):
+        for partner in self:
+            domain = self.get_opp_domain(partner)
+            opps = []
+            if len(domain):
+                domain = self._add_end_user(domain, partner)
+                domain.append(('type', '=', 'opportunity'))
+                opps = self.env['crm.lead'].search(domain)
+
+            partner.opportunity_count_ids = opps
+            partner.opportunity_count = len(opps)
+
+    def action_view_opportunity(self):
+        self.ensure_one()
+        action = self.env.ref('crm.crm_lead_opportunities').read()[0]
+        domain = self.get_opp_domain(self)
+        domain = self._add_end_user(domain, self)
+        domain.append(('type', '=', 'opportunity'))
+        action['domain'] = domain
+        return action
+
     def get_opp_domain(self, partner):
         domain = []
         if not partner.id:
@@ -69,26 +137,5 @@ class CustomResPartner(models.Model):
         else:
             domain.insert(0, '|')
             domain.append(('x_studio_end_user.id', '=', partner.id))
-        
+
         return domain
-    
-    def _compute_opportunity_count(self):
-        for partner in self:
-            domain = self.get_opp_domain(partner)
-            opps = []
-            if len(domain):
-                domain = self._add_end_user(domain, partner)
-                domain.append(('type', '=', 'opportunity'))
-                opps = self.env['crm.lead'].search(domain)
-
-            partner.opportunity_count_ids = opps
-            partner.opportunity_count = len(opps)
-
-    def action_view_opportunity(self):
-        self.ensure_one()
-        action = self.env.ref('crm.crm_lead_opportunities').read()[0]
-        domain = self.get_opp_domain(self)
-        domain = self._add_end_user(domain, self)
-        domain.append(('type', '=', 'opportunity'))
-        action['domain'] = domain
-        return action
