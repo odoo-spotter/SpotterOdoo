@@ -58,31 +58,10 @@ class CustomResPartner(models.Model):
         except:
             pass
     
-    def _compute_opportunity_count(self):
-        for partner in self:
-            domain = self.get_opp_domain(partner)
-            opps = []
-            if len(domain):
-                domain = self._add_end_user(domain, partner)
-                domain.append(('type', '=', 'opportunity'))
-                opps = self.env['crm.lead'].search(domain)
-
-            partner.opportunity_count_ids = opps
-            partner.opportunity_count = len(opps)
-
-    def action_view_opportunity(self):
-        self.ensure_one()
-        action = self.env.ref('crm.crm_lead_opportunities').read()[0]
-        domain = self.get_opp_domain(self)
-        domain = self._add_end_user(domain, self)
-        domain.append(('type', '=', 'opportunity'))
-        action['domain'] = domain
-        return action
-
     def get_opp_domain(self, partner):
         domain = []
         if not partner.id:
-            return [('id', '=', False)]
+            return None
         if partner.is_company:
             domain = [
                 '|', '|', '|', '|', '|', '|', '|', '|', '|',
@@ -137,5 +116,26 @@ class CustomResPartner(models.Model):
         else:
             domain.insert(0, '|')
             domain.append(('x_studio_end_user.id', '=', partner.id))
-
+        
         return domain
+    
+    def _compute_opportunity_count(self):
+        for partner in self:
+            domain = self.get_opp_domain(partner)
+            opps = []
+            if domain:
+                domain = self._add_end_user(domain, partner)
+                domain.append(('type', '=', 'opportunity'))
+                opps = self.env['crm.lead'].search(domain)
+
+            partner.opportunity_count_ids = opps
+            partner.opportunity_count = len(opps)
+
+    def action_view_opportunity(self):
+        self.ensure_one()
+        action = self.env.ref('crm.crm_lead_opportunities').read()[0]
+        domain = self.get_opp_domain(self)
+        domain = self._add_end_user(domain, self)
+        domain.append(('type', '=', 'opportunity'))
+        action['domain'] = domain
+        return action
