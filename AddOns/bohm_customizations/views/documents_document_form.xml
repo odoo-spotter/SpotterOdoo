@@ -6,23 +6,20 @@
         <field name="inherit_id" ref="documents.document_view_form"/>
         <field name="arch" type="xml">
             <header>
-                <field name="state" widget="statusbar"/>
+                <field name="state" widget="statusbar" options="{'clickable': '1'}" statusbar_visible="draft,pending,updating"/>
             </header>
             <xpath expr="//button[@name='create_share']" position="before">
                 <button name="action_approved" type="object"
                     groups="documents.group_documents_manager"
                     string="Approve"
                     class="oe_highlight"
-                    attrs="{'invisible': ['|', ('state', '!=', 'pending'), ('id', '=', False)]}"/>
-                <button name="action_draft" type="object"
-                    string="Set To Draft"
-                    class="oe_highlight"
-                    attrs="{'invisible': ['|', ('state', '=', 'draft'), ('id', '=', False)]}"/>
+                    states="pending"
+                />
                 <button name="action_submit_approval" type="object"
                     string="Submit for Approval"
                     class="oe_highlight"
-                    attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('id', '=', False)]}"/>
-                
+                    states="draft,updating"
+                />
             </xpath>    
                 
             <xpath expr="//field[@name='create_uid']" position="after">

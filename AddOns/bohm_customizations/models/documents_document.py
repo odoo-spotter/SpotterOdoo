@@ -27,6 +27,7 @@ class CustomDocumentsDocument(models.Model):
     state = fields.Selection([
         ('draft', 'Draft'),
         ('pending', 'Pending Approval'),
+        ('updating', 'Needs Updating'),
         ('approved', 'Approved')
     ], 'Status', default='draft', index=True, required=True, copy=False, tracking=True)
 
@@ -39,9 +40,21 @@ class CustomDocumentsDocument(models.Model):
 
     def action_draft(self):
         self.state = 'draft'
-    
+
     def action_submit_approval(self):
         self.state = 'pending'
-    
+
     def action_approved(self):
         self.state = 'approved'
+
+    @api.model
+    def create(self, vals):
+        tech_directory = self.env['documents.folder'].search(
+            [('name', 'ilike', 'tech')], limit=1)
+
+        if vals.get('folder_id') == tech_directory.id:
+            file_type = vals.get('name').rsplit('.')[1]
+            vals['name'] = str(self.env['ir.sequence'].search(
+                [('name', 'ilike', 'tech')]).next_by_id()) + '.' + str(file_type)
+
+        return super(CustomDocumentsDocument, self).create(vals)

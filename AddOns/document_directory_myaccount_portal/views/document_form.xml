@@ -9,7 +9,7 @@
                 <field name="x_description" />
             </xpath>
             <xpath expr="//sheet[1]" position="inside">
-                <notebook>
+                <notebook attrs="{'invisible': [('state', '!=', 'approved')]}">
                     <page string="Portal Access Rights">
                         <group>
                             <field name="x_directory_id" string="Directory"/>            
