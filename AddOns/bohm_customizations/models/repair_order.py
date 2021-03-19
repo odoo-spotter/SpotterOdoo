@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class CustomRepairOrder(models.Model):
     _name = 'repair.order'
     _inherit = 'repair.order'
-  
+
     state = fields.Selection(
         selection_add=[('waiting', 'Waiting'), ('confirmed',)],
         help="* The \'Draft\' status is used when a user is encoding a new and unconfirmed repair order.\n"
@@ -20,6 +20,11 @@ class CustomRepairOrder(models.Model):
              "* The \'To be Invoiced\' status is used to generate the invoice before or after repairing done.\n"
              "* The \'Done\' status is set when repairing is completed.\n"
              "* The \'Cancelled\' status is used when user cancel repair order.")
+
+    x_team_id = fields.Many2one(
+        comodel_name="crm.team",
+        string="Salesperson"
+    )
 
     def set_to_waiting(self):
         self.state = 'waiting'

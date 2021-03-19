@@ -25,13 +25,18 @@ class CustomCrmTeam(models.Model):
             end_month = self.last_day_of_month(datetime.date(
                 int(record.x_goal_year), int(record.x_goal_month), 1))
 
-            sales = record.env['sale.order'].search([('team_id', '=', record.x_team_id.name), ('state', 'in', ['sale', 'done']), (
-                'date_order', '>=', start_month), ('date_order', '<=', end_month)])
+            leads = record.env['crm.lead'].search([('team_id', '=', record.x_team_id.id), ('stage_id.is_won', '=', True), (
+                'date_closed', '>=', start_month), ('date_closed', '<=', end_month)])
+
+            repairs = record.env['repair.order'].search([('x_team_id', '=', record.x_team_id.id), (
+                'x_confirmed_date', '>=', start_month), ('x_confirmed_date', '<=', end_month)])
 
             total = 0
 
-            for sale in sales:
-                total += sale.amount_total
+            for lead in leads:
+                total += lead.planned_revenue
+            for repair in repairs:
+                total += repair.amount_total
 
             record.x_total_reached = total
             record.x_total_remaining = record.x_goal_amount - record.x_total_reached
@@ -39,6 +44,11 @@ class CustomCrmTeam(models.Model):
     def last_day_of_month(self, any_day):
         next_month = any_day.replace(day=28) + datetime.timedelta(days=4)
         return next_month - datetime.timedelta(days=next_month.day)
+
+    def update_all(self):
+        sales_teams = self.search([])
+        for team in sales_teams:
+            team.refresh_total()
 
 
 class CrmTeamSalesGoalMonthLines(models.Model):

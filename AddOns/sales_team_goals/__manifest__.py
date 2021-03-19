@@ -13,7 +13,7 @@
     'website': "https://www.bohmtechnologies.com",
     'category': 'Sales',
     'version': '0.1',
-    'depends': ['base', 'sale', 'crm'],
+    'depends': ['base', 'sale', 'crm', 'repair'],
     'data': [
         'security/ir.model.access.csv',
         'views/sales_dashboard.xml',

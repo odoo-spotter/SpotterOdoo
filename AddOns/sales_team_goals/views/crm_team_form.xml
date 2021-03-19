@@ -21,7 +21,7 @@
                         </field>
                     </group>
                     <group style="text-align: right;">
-                        <button name="refresh_total" string="Refresh Sales Data" type="object"></button>
+                        <button name="update_all" string="Refresh Sales Data" type="object"></button>
                     </group>
                 </page>
             </xpath>
