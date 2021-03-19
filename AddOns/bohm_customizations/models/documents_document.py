@@ -55,7 +55,7 @@ class CustomDocumentsDocument(models.Model):
         if vals.get('folder_id') == tech_directory.id:
             file_type = vals.get('name').rsplit('.')[1]
             seq = str(self.env['ir.sequence'].search(
-                [('name', 'ilike', 'knowledge')]).next_by_id())
+                [('name', 'ilike', 'knowledge')], limit=1).next_by_id())
             if vals.get('url'):
                 vals['name'] = seq
             else:
