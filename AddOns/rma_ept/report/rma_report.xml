@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-	<data>
-		<report id="action_report_rma" string="RMA Report" model="crm.claim.ept"
-			report_type="qweb-pdf" file="rma_ept.report_rma" name="rma_ept.report_rma"
-			print_report_name="'RMA Report - %s' % (object.code)" />
-	</data>
-</odoo>
