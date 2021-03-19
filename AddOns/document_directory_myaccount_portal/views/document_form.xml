@@ -10,7 +10,7 @@
             </xpath>
             <xpath expr="//sheet[1]" position="inside">
                 <notebook>
-                    <page string="Portal Access Rights">
+                    <page string="Portal Access Rights" name="portal">
                         <group>
                             <field name="x_directory_id" string="Directory"/>            
                             <field name="x_partner_ids" string="User Portal Access" widget="many2many_tags"/>

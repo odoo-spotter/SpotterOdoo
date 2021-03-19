@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_document_form_inherit_portal" model="ir.ui.view">
+        <field name="name">Document Form Customization</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_form"/>
+        <field name="arch" type="xml">
+            <header>
+                <field name="state" widget="statusbar" options="{'clickable': '1'}" statusbar_visible="draft,pending,updating"/>
+            </header>
+            <xpath expr="//button[@name='create_share']" position="before">
+                <button name="action_approved" type="object"
+                    groups="documents.group_documents_manager"
+                    string="Approve"
+                    class="oe_highlight"
+                    states="pending"
+                />
+                <button name="action_submit_approval" type="object"
+                    string="Submit for Approval"
+                    class="oe_highlight"
+                    states="draft,updating"
+                />
+            </xpath>    
+                
+            <xpath expr="//field[@name='create_uid']" position="after">
+                <field name="x_version" />
+                <field name="x_previous_version" domain="[('id', '!=', active_id)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

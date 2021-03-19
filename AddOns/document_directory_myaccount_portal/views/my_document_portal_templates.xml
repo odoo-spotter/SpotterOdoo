@@ -170,7 +170,7 @@
                                 <th>Document Name</th>
                                 <th>Owner Name</th>
                                 <th>Create Date</th>
-                                <!-- <th>Description</th> -->
+                                <th>Description</th>
                                 <th class="text-center">Download Now</th>
                             </tr>
                         </thead>
@@ -187,9 +187,9 @@
                                 <td>
                                      <span t-esc="attachment.create_date"/>
                                 </td>
-                                <!-- <td>
-                                     <span t-esc="attachment.x_description"/>
-                                </td> -->
+                                <td>
+                                     <span t-esc="attachment.x_description[0:50] if attachment.x_description else ''"/>
+                                </td>
                                 <td class="text-center">
                                    <!--
                                     <a t-att-href="'/my/document/'+str(attachment.id)+'?download=true'" target="_blank">
