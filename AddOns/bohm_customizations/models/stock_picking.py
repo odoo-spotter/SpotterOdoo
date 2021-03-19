@@ -16,7 +16,7 @@ class CustomStockPicking(models.Model):
 
 
     def button_validate(self):
-        res = super(CustomStockPicking, self)
+        res = super(CustomStockPicking, self).button_validate()
         
         delivery_type = self.env['stock.picking.type'].search([('name', 'ilike', 'Delivery')], limit=1)
         if not self.carrier_tracking_ref and self.picking_type_id.id == delivery_type.id:
