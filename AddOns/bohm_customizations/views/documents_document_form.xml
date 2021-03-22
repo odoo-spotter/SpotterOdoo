@@ -24,7 +24,21 @@
                 
             <xpath expr="//field[@name='create_uid']" position="after">
                 <field name="x_version" />
-                <field name="x_previous_version" domain="[('id', '!=', active_id)]"/>
+                <field name="x_original_version" domain="[('id', '!=', active_id), ('folder_id', '=', folder_id), ('x_original_version', '=', False), ('type', '=', type)]"/>
+                <field name="x_updates" attrs="{'required': [('x_original_version', '!=', False)], 'invisible': [('x_original_version', '=', False)]}"/>
+            </xpath>
+            
+            <xpath expr="//sheet[1]/notebook[1]" position="inside">
+                <page string="Version History" name="version">
+                     <field name="x_related_documents" widget="many2many">
+                        <tree>
+                            <field name="name" />
+                            <field name="x_version"/>
+                            <field name="create_date"/>
+                            <field name="x_updates" />
+                        </tree>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>
