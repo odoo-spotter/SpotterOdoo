@@ -7,16 +7,7 @@
              <script type="text/javascript" src="/document_directory_myaccount_portal/static/src/js/website_portal_templet.js"></script>
            </xpath>
     </template>
-    
-<!--    <template id="portal_my_home_mydocument" name="Portal My Home : My document entries"-->
-<!--        inherit_id="portal.portal_my_home" priority="30">-->
-<!--        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">-->
-<!--            <li class="list-group-item">-->
-<!--                <a href="/my/documents">My Documents</a>-->
-<!--            </li>-->
-<!--        </xpath>-->
-<!--    </template>-->
-    
+
     <template id="portal_my_home_mydocument" name="Portal My ticket: My document entries" inherit_id="portal.portal_my_home" priority="28"><!-- odoo11 -->
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-call="portal.portal_docs_entry">
@@ -37,6 +28,9 @@
                 <t t-esc="directory.name"/>
             </li>
             <li t-if="attachment" class="breadcrumb-item active">
+                <a t-esc="attachment.directory_id.name" t-attf-href="/my/directory_documents/#{ slug(attachment.directory_id) }?{{ keep_query() }}" />
+            </li>
+            <li t-if="attachment" class="breadcrumb-item active">
                 <t t-esc="attachment.name"/>
             </li>
         </xpath>
@@ -47,13 +41,14 @@
             <t t-if="directorys" t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
-                        <th>Directory Name</th>
+                        <th>Directory</th>
                         <th style="text-align: right;">Documents</th>
                     </tr>
                 </thead>
                 <t t-foreach="directorys" t-as="directory">
                     <tr t-if="doc_counts[directory_index]">
                         <td>
+                            <i class="fa fa-folder mr-2"/> 
                             <a t-attf-href="/my/directory_documents/#{directory.id}?#{keep_query()}">
                                 <t t-esc="directory.name"/>
                             </a>
@@ -64,183 +59,54 @@
                     </tr>
                 </t>
             </t>
-<!--            <div t-if="not no_breadcrumbs and not my_details and not breadcrumbs_searchbar" class="o_portal container mt-3">-->
-<!--                <div class="row align-items-center bg-white no-gutters border rounded">-->
-<!--                    <div class="col">-->
-<!--                        <t t-call="portal.portal_breadcrumbs"></t>-->
-<!--                    </div>-->
-<!--                    <div t-if="prev_record or next_record" class="col flex-grow-0">-->
-<!--                        <t t-call='portal.record_pager'/>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div id="wrap">-->
-<!--                <div class="container">-->
-<!--                    <div class="oe_structure">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-sm-6">-->
-<!--                                <ol class="breadcrumb mt8">-->
-<!--                                    <li>-->
-<!--                                        <a href="/my/home">-->
-<!--                                            <i class="fa fa-home"/>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                    <li>Directory</li>-->
-<!--                                </ol>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <h3>-->
-<!--                        Directory-->
-<!--                        <t t-call="portal.portal_searchbar"/>-->
-<!--                    </h3>-->
-<!--                    <t t-if="not directorys">-->
-<!--                        <p>There are currently no directory for your account.</p>-->
-<!--                    </t>-->
-<!--                    <div class="row">-->
-<!--                        <div class="col-sm-4 pull-right">-->
-<!--                            <input type="text" id="myInput" name="search" class="myInput" placeholder="Search for name..." title="Type in a name"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div t-if="directorys" class="panel panel-default">-->
-<!--                        <div class="table-responsive">-->
-<!--                            <t t-if="directorys" t-call="portal.portal_table">-->
-<!--                                <thead>-->
-<!--                                    <tr class="active">-->
-<!--                                        <th>#</th>-->
-<!--                                    </tr>-->
-<!--                                </thead>-->
-<!--                                <t t-foreach="directorys" t-as="directory">-->
-<!--                                    <tr>-->
-<!--                                        <td>-->
-<!--                                            <a t-attf-href="/my/directory_documents/#{directory.id}?#{keep_query()}">-->
-<!--                                                <t t-esc="directory.name"/>-->
-<!--                                            </a>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </t>-->
-<!--                            </t>-->
-<!--                        </div>-->
-<!--                        <div t-if="pager" class="o_portal_pager text-center">-->
-<!--                            <t t-call="portal.pager"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
         </t>
     </template>
     
     <template id="portal_my_directory_document" name="My Directory Document">
         <t t-call="portal.portal_layout">
-            <div id="wrap">
-                <div class="container">
-                    <div class="oe_structure">
-<!--                        <div class="row">-->
-<!--                            <div class="col-sm-6">-->
-<!--                                <ol class="breadcrumb mt8">-->
-<!--                                    <li>-->
-<!--                                        <a href="/my/home">-->
-<!--                                            <i class="fa fa-home"/>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <a t-attf-href="/my/documents?#{keep_query()}">Directory</a>-->
-<!--                                    </li>-->
-<!--                                    <li><span t-esc="directory.name"/></li>-->
-<!--                                </ol>-->
-<!--                            </div>-->
-<!--                        </div>-->
-                    </div>
-                    <h3>
-                        Documents
-                       <!--  <t t-call="portal.portal_searchbar"/> -->
-                    </h3>
-                    <t t-if="not attachments">
-                        <p>There are currently no Document for your account.</p>
-                    </t>
-<!--                    <div class="row">-->
-<!--                        <div class="col-sm-4 pull-right">-->
-<!--                            <input type="text" id="myInput" name="search" class="myInput" placeholder="Search for name..." title="Type in a name"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                    
-                    <t t-if="attachments" t-call="portal.portal_table">
-                        <thead>
-                            <tr class="active">
-                                <th>Document Name</th>
-                                <th>Owner Name</th>
-                                <th>Create Date</th>
-                                <th>Description</th>
-                                <th class="text-center">Download Now</th>
-                            </tr>
-                        </thead>
-                        <t t-foreach="attachments" t-as="attachment">
-                            <tr>
-                                <td>
-                                    <a t-attf-href="/my/directory_doc/#{attachment.id}?#{keep_query()}">
-                                        <t t-esc="attachment.name"/>
-                                    </a>
-                                </td>
-                                <td>
-                                     <span t-esc="attachment.create_uid.name"/>
-                                </td>
-                                <td>
-                                     <span t-esc="attachment.create_date"/>
-                                </td>
-                                <td>
-                                     <span t-esc="attachment.x_description[0:50] if attachment.x_description else ''"/>
-                                </td>
-                                <td class="text-center">
-                                   <!--
-                                    <a t-att-href="'/my/document/'+str(attachment.id)+'?download=true'" target="_blank">
-                                        <i class="fa fa-download fa-2x"></i>
-                                    </a>-->
-                                    <a t-attf-href="/my/document/#{attachment.id}?download=true" target="_blank">
-                                        <i class="fa fa-download fa-2x"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </t>
-                    </t>
-<!--                    <div t-if="attachments" class="panel panel-default">-->
-<!--                        <div class="table-responsive">-->
-<!--                            <t t-if="attachments" t-call="portal.portal_table">-->
-<!--                                <thead>-->
-<!--                                    <tr class="active">-->
-<!--                                        <th>Document Name</th>-->
-<!--                                        <th>Owner Name</th>-->
-<!--                                        <th>Create Date</th>-->
-<!--                                        <th class="text-center">Downlod Now</th>-->
-<!--                                    </tr>-->
-<!--                                </thead>-->
-<!--                                <t t-foreach="attachments" t-as="attachment">-->
-<!--                                    <tr>-->
-<!--                                        <td>-->
-<!--                                            <a t-attf-href="/my/directory_doc/#{attachment.id}?#{keep_query()}">-->
-<!--                                                <t t-esc="attachment.name"/>-->
-<!--                                            </a>-->
-<!--                                        </td>-->
-<!--                                        <td>-->
-<!--                                             <span t-esc="attachment.create_uid.name"/>-->
-<!--                                        </td>-->
-<!--                                        <td>-->
-<!--                                             <span t-esc="attachment.create_date"/>-->
-<!--                                        </td>-->
-<!--                                        <td class="text-center">-->
-<!--                                            <a t-att-href="'/my/document/'+str(attachment.id)+'?download=true'">-->
-<!--                                                <i class="fa fa-download fa-2x"></i>-->
-<!--                                            </a>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </t>-->
-<!--                            </t>-->
-<!--                        </div>-->
-<!--                        <div t-if="pager" class="o_portal_pager text-center">-->
-<!--                            <t t-call="portal.pager"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                </div>
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Documents</t>
+            </t>
+
+            <div t-if="not attachments" class="alert alert-info">
+                <p>There are currently no Documents for your account.</p>
             </div>
+            <t t-if="attachments" t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <th>Document Name</th>
+                        <th>Author</th>
+                        <th>Create Date</th>
+                        <th>Description</th>
+                        <th class="text-center">Download Now</th>
+                    </tr>
+                </thead>
+                <t t-foreach="attachments" t-as="attachment">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/my/directory_doc/#{attachment.id}?#{keep_query()}">
+                                <t t-esc="attachment.name"/>
+                            </a>
+                        </td>
+                        <td>
+                                <span t-esc="attachment.create_uid.name"/>
+                        </td>
+                        <td>
+                            <span t-esc="attachment.create_date.strftime('%B %d, %Y, %H:%M:%S')" />
+                        </td>
+                        <td>
+                            <span t-esc="attachment.x_description[0:50] if attachment.x_description else ''"/>
+                        </td>
+                        <td class="text-center">
+                            <a t-attf-href="/my/document/#{attachment.id}?download=true" target="_blank">
+                                <i class="fa fa-download fa-2x"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </t>
+            </t>
         </t>
     </template>
     
@@ -281,68 +147,6 @@
                     </div>
                 </t>
             </t>
-<!--            <div id="wrap">-->
-<!--                <div id="optional_placeholder">-->
-<!--                </div>-->
-<!--                <div class="container">-->
-<!--                    <div class="oe_structure">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-sm-6">-->
-<!--                                <ol class="breadcrumb mt8">-->
-<!--                                    <li>-->
-<!--                                        <a href="/my/home">-->
-<!--                                            <i class="fa fa-home"/>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <a t-attf-href="/my/documents?#{keep_query()}">Directory</a>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <a t-attf-href="/my/directory_documents/#{attachment.directory_id.id}?#{keep_query()}"><span t-esc="attachment.directory_id.name"/></a>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <span t-esc="attachment.name"/>-->
-<!--                                    </li>-->
-<!--                                </ol>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="panel panel-default">-->
-<!--                        <div class="panel-heading">-->
-<!--                            <div class="row">-->
-<!--                                <div class="col-md-8">-->
-<!--                                    <h4>-->
-<!--                                        <t t-call='portal.record_pager'/>-->
-<!--                                        <t>Attachment</t>-->
-<!--                                        <span t-esc="attachment.name"/>-->
-<!--                                    </h4>-->
-<!--                                </div>-->
-<!--                                <div class="col-md-2" id="o_portal_order_actions">-->
-<!--                                    <a t-att-href="'/my/document/'+str(attachment.id)+'?download=true'" class="ml8 pull-right mt4 mr8" >-->
-<!--                                        <i class="fa fa-download fa-2x"></i>-->
-<!--                                    </a>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="panel-body">-->
-<!--                        <div class='row'>-->
-<!--                            <div class="col-md-6">-->
-<!--                                <strong>Type:</strong>-->
-<!--                                <span t-field="attachment.type"/>-->
-<!--                            </div>-->
-<!--                            <div class="col-md-6">-->
-<!--                                <strong>Mime Type :</strong>-->
-<!--                                <span t-field="attachment.mimetype"/>-->
-<!--                            </div>-->
-<!--                            <div class="col-md-6">-->
-<!--                                <strong>Directory :</strong>-->
-<!--                                <span t-field="attachment.directory_id.name"/>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
         </t>
     </template>
 </odoo>
