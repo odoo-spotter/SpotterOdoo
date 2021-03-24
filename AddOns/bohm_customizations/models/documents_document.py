@@ -72,9 +72,12 @@ class CustomDocumentsDocument(models.Model):
     @api.model
     def create(self, vals):
         tech_directory = self.env['documents.folder'].search(
-            [('name', 'ilike', 'knowledge')], limit=1)
-
-        if vals.get('folder_id') == tech_directory.id:
+            ['|', ('name', 'ilike', 'knowledge'), ('parent_folder_id.name','ilike', 'knowledge')])
+        directory_ids = []
+        for directory in tech_directory:
+            directory_ids.append(directory.id)
+        
+        if vals.get('folder_id') in directory_ids:
             seq = str(self.env['ir.sequence'].search(
                 [('name', 'ilike', 'knowledge')], limit=1).next_by_id())
             if vals.get('url'):
