@@ -18,8 +18,8 @@ class CustomStockPicking(models.Model):
     def button_validate(self):
         res = super(CustomStockPicking, self).button_validate()
         
-        delivery_type = self.env['stock.picking.type'].search([('name', 'ilike', 'Delivery')], limit=1)
-        if not self.carrier_tracking_ref and self.picking_type_id.id == delivery_type.id:
+        delivery_type = self.env['stock.picking.type'].search(['|', ('name', 'ilike', 'Delivery'), ('name', 'ilike', 'Return')])
+        if not self.carrier_tracking_ref and self.picking_type_id in delivery_type:
             raise ValidationError(_('Please supply the Tracking Reference in the Additional Info tab for this order.'))
 
         return res

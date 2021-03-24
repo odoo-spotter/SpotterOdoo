@@ -42,7 +42,7 @@ class CustomRepairOrder(models.Model):
             errors.append(
                 '- You must add Parts or Operations to proceed with this repair.')
 
-        if self.ticket_id:
+        if self.ticket_id and not self.x_studio_is_a_replacement:
             return_receipt = self.env['stock.picking'].search([
                 ('x_ticket_id', '=', self.ticket_id.id),
                 ('state', 'not in', ['cancel', 'done']),
@@ -65,7 +65,7 @@ class CustomRepairOrder(models.Model):
     def create_return_delivery(self):
         if self.ticket_id:
             picking_type = self.env['stock.picking.type'].search(
-                [('name', 'ilike', 'Delivery')], limit=1)
+                [('name', 'ilike', 'Return')], limit=1)
             location_dest_id = self.env['stock.location'].search(
                 [('name', 'ilike', 'Customers'), ('usage', '=', 'customer')], limit=1)
 
