@@ -56,8 +56,9 @@ class CustomHelpdeskTicket(models.Model):
 
     def create_rma_receipt(self):
         picking_type = self.env['stock.picking.type'].search(
-            [('name', 'ilike', 'RMA')], limit=1
+            [('name', 'ilike', 'RMA'), ('code', '=', 'internal')], limit=1
         )
+
         location_id = self.env['stock.location'].search(
             [('name', 'ilike', 'Customers'), ('usage', '=', 'customer')], limit=1
         )

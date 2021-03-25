@@ -47,7 +47,7 @@ class CustomRepairOrder(models.Model):
                 ('x_ticket_id', '=', self.ticket_id.id),
                 ('state', 'not in', ['cancel', 'done']),
                 ('picking_type_id', '=', self.env['stock.picking.type'].search(
-                    [('name', 'ilike', 'RMA')], limit=1).id)
+                    [('name', 'ilike', 'RMA'), ('code', '=', 'internal')], limit=1).id)
             ])
 
             if return_receipt:
@@ -62,10 +62,19 @@ class CustomRepairOrder(models.Model):
             raise ValidationError(msg)
         return res
 
+    def action_repair_start(self):
+        if self.invoice_method == 'b4repair':
+            for invoice in self.invoice_id:
+                if invoice.state == 'draft':
+                    raise ValidationError(
+                        'This repair cannot be started until the attached invoice has posted.')
+        
+        return super(CustomRepairOrder, self).action_repair_start()
+
     def create_return_delivery(self):
         if self.ticket_id:
             picking_type = self.env['stock.picking.type'].search(
-                [('name', 'ilike', 'Return')], limit=1)
+                [('name', 'ilike', 'RMA'), ('code', '=', 'outgoing')], limit=1)
             location_dest_id = self.env['stock.location'].search(
                 [('name', 'ilike', 'Customers'), ('usage', '=', 'customer')], limit=1)
 
