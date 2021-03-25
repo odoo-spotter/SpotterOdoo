@@ -20,25 +20,55 @@
                     class="oe_highlight"
                     states="draft,updating"
                 />
-            </xpath>    
-                
+            </xpath>
+
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" name="action_view_document_history" icon="fa-history"
+                    type="object" string="Version History"> 
+                </button>
+                <button class="oe_stat_button" name="action_new_version" icon="fa-plus-square"
+                    type="object" string="New Version"> 
+                </button>
+            </xpath>
+
+            <xpath expr="//sheet[1]" position="inside">
+                <notebook attrs="{'invisible': ['|', ('state', '!=', 'approved'), ('type', '!=', 'binary')]}">
+                    <page string="Portal Access Rights" name="portal">
+                        <group>
+                            <field name="x_directory_id" string="Directory"/>            
+                            <field name="x_partner_ids" string="User Portal Access" widget="many2many_tags"/>
+                            <field name="x_all_users" string="Share With All Users"/>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+
             <xpath expr="//field[@name='create_uid']" position="after">
                 <field name="x_version" />
-                <field name="x_original_version" domain="[('id', '!=', active_id), ('folder_id', '=', folder_id), ('x_original_version', '=', False), ('type', '=', type)]"/>
-                <field name="x_updates" attrs="{'required': [('x_original_version', '!=', False)], 'invisible': [('x_original_version', '=', False)]}"/>
+                <field name="x_original_version" />
+                <field name="x_updates" attrs="{'invisible': [('x_original_version', '=', False)]}"/>
             </xpath>
-            
-            <xpath expr="//sheet[1]/notebook[1]" position="inside">
-                <page string="Version History" name="version">
-                     <field name="x_related_documents" widget="many2many">
-                        <tree>
-                            <field name="name" />
-                            <field name="x_version"/>
-                            <field name="create_date"/>
-                            <field name="x_updates" />
-                        </tree>
-                    </field>
-                </page>
+        </field>
+    </record>
+
+    <record id="view_document_list" model="ir.ui.view">
+        <field name="name">Document List Customization</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="replace">
+                <tree class="o_documents_list_view"
+                  create="false" edit="false"
+                  decoration-info="type == 'empty'">
+                    <field name="name" string="Document Name" required="True"/>
+                    <field name="tag_ids" widget="many2many_tags"/>
+                    <field name="owner_id"/>
+                    <field name="state" />
+                    <field name="x_version"/>
+                    <field name="type"/>
+                    <field name="create_date" widget="date"/>
+                    <field name="activity_exception_decoration" widget="activity_exception"/>
+                </tree>
             </xpath>
         </field>
     </record>
