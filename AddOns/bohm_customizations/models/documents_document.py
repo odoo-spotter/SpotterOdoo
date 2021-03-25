@@ -22,7 +22,7 @@ class CustomDocumentsDocument(models.Model):
         comodel_name='documents.document',
         string="Original Version"
     )
-
+    
     x_related_documents = fields.Many2many(
         'documents.document',
         compute="_compute_related_documents"
