@@ -68,8 +68,21 @@ class CustomRepairOrder(models.Model):
                 if invoice.state == 'draft':
                     raise ValidationError(
                         'This repair cannot be started until the attached invoice has posted.')
-        
+
         return super(CustomRepairOrder, self).action_repair_start()
+
+    def action_repair_invoice_create(self):
+        res = super(CustomRepairOrder, self).action_repair_invoice_create()
+
+        for record in self:
+            for invoice in record.invoice_id:
+                try:
+                    if record.ticket_id.x_studio_bdm_2.user_partner_id not in invoice.message_partner_ids:
+                        invoice.sudo().message_subscribe(
+                            [record.ticket_id.x_studio_bdm_2.user_partner_id.id])
+                except:
+                    pass
+        return res
 
     def create_return_delivery(self):
         if self.ticket_id:
