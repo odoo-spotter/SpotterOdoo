@@ -8,17 +8,6 @@
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="x_description" />
             </xpath>
-            <xpath expr="//sheet[1]" position="inside">
-                <notebook>
-                    <page string="Portal Access Rights">
-                        <group>
-                            <field name="x_directory_id" string="Directory"/>            
-                            <field name="x_partner_ids" string="User Portal Access" widget="many2many_tags"/>
-                            <field name="x_all_users" string="Share With All Users"/>
-                        </group>
-                    </page>
-                </notebook>
-            </xpath>
         </field>
     </record>
     
