@@ -11,6 +11,7 @@
             </xpath>
             <xpath expr="//header" postion="inside">
                 <button name="set_to_draft" string="Set to Quotation" states="waiting" type="object" class="oe_highlight"/>
+                <button name="create_return_delivery" string="Create Delivery" type="object" states="done" class="oe_highlight"/>
             </xpath>
             <xpath expr="//field[@name='user_id']" position="before">
                 <field name="x_team_id" options="{'no_create_edit': True}"/>
