@@ -134,13 +134,10 @@
                         <div class="col-4 col-md-4 mb-1" style="height: 500px; overflow-y: scroll">
                             <div class="mb-4"><strong>Directory: </strong> <span t-field="attachment.directory_id.name"/></div>
                             <div class="mb-4"><strong>Mime Type:</strong> <span t-field="attachment.mimetype"/></div>
-                            
-                            <span t-esc="base_url"/>
                             <div><strong>Description: </strong> <span t-esc="attachment.x_description"/></div>
                         </div>
                         <div class="col-8 col-md-8 mb-1">
-                            <iframe style="width: 100%; height: 500px" t-att-src="'https://docs.google.com/viewer?url=%s%s&amp;embedded=true' % (base_url, attachment.local_url)"></iframe>
-                            <!-- <embed t-att-src="attachment.local_url" t-att-type="attachment.mimetype" style="width: 100%; height: 500px" /> -->
+                            <embed t-att-src="attachment.local_url" t-att-type="attachment.mimetype" style="width: 100%; height: 500px" />
                         </div>
                     </div>
                 </t>

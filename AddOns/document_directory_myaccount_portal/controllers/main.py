@@ -134,12 +134,10 @@ class CustomerPortal(CustomerPortal):
     def portal_directory_attachment_page(self, attachment=None, access_token=None, **kw):
         partner = request.env.user.partner_id
         attachment_id = request.env['ir.attachment'].sudo().browse(attachment)
-        base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
         if partner.commercial_partner_id not in attachment_id.partner_ids.commercial_partner_id and attachment_id.x_all_users != True:
             return request.redirect("/")
         values = {
-            'attachment': attachment_id,
-            'base_url': base_url
+            'attachment': attachment_id
         }
         return request.render("document_directory_myaccount_portal.portal_attachment_page", values)    
 
