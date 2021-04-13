@@ -1,0 +1,9 @@
+<odoo>
+    <data>
+        <template id="assets_backend" name="im assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/bryntum_gantt_enterprise/static/src/js/main.js"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>
