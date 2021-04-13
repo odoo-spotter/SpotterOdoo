@@ -1,0 +1,80 @@
+<odoo>
+    <data>
+        <!--    custom form view task project-->
+        <record id="custom_form_project_task" model="ir.ui.view">
+            <field name="name">Add checklist</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="check_box" string="Checklist"/>
+                </xpath>
+                <xpath expr="//page[@name='extra_info']" position="after">
+                    <page name="checklist_info" attrs="{'invisible':[('check_box','!=',True)]}" string="Checklist">
+                        <field name="info_checklist">
+                            <tree editable="bottom" decoration-success="status=='done'"
+                                  decoration-danger="status=='cancel'" decoration-info="status=='progress'">
+                                <field name="name_work" string="Name" required="1"/>
+                                <field name="description" string="Description"/>
+                                <field name="status" string="Status"/>
+                                <button name="do_accept" string="Done" type="object" icon="fa-check text-success"
+                                        attrs="{'invisible':['|',('status','=','done'),('status','=','cancel')]}"/>
+                                <button name="do_cancel" string="Cancel" type="object"
+                                        icon="fa-times-circle text-danger"
+                                        attrs="{'invisible':['|',('status','=','done'),('status','=','cancel')]}"/>
+                                <button name="do_progress" string="progress" type="object"
+                                        icon="fa-play"
+                                        attrs="{'invisible':[('status','!=',False)]}"/>
+                                <button name="do_set_to" string="Refresh" type="object"
+                                        icon="fa-refresh"
+                                        attrs="{'invisible':[('status','!=','cancel')]}"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <field name="maximum_rate" string="Max" invisible="1"/>
+                    <field name="progress_rate" string="Checklist Progress" widget="gauge"
+                           style="width:300px;height:225px;cursor:pointer;"
+                           options="{'max_field': 'maximum_rate'}" attrs="{'invisible':[('check_box','=',False)]}"/>
+                </xpath>
+            </field>
+        </record>
+        <!--        show up progress on tree view task project-->
+        <record id="custom_tree_view_project_task" model="ir.ui.view">
+            <field name="name">Show up progress</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='stage_id']" position="replace">
+                    <field name="progress_rate" widget="progressbar"/>
+                </xpath>
+
+            </field>
+        </record>
+        <record model="ir.ui.view" id="task_project_kanban_view_extened">
+            <field name="name">task kanban extened</field>
+            <field name="inherit_id" ref="project.view_task_kanban"/>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <xpath expr='//kanban/templates/t/div/div/div[2]' position="after">
+                    <field name="check_box" invisible="1"/>
+                    <field name="progress_rate" widget="percentpie" attrs="{'invisible': [('check_box', '=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="Mark_done_activities" model="ir.actions.server">
+            <field name="name">#Mark Done activities late</field>
+            <field name="model_id" ref="model_project_task"/>
+            <field name="binding_model_id" ref="project_task_check_list.model_project_task"/>
+            <field name="state">code</field>
+            <field name="code">
+                 if records:
+                    env['mail.activity'].search([('res_model', '=', 'project.task'),('res_id','in',records.ids),('user_id','=',user.id),('date_deadline','&lt;',datetime.datetime.now())]).action_done()
+            </field>
+        </record>
+    </data>
+</odoo>
