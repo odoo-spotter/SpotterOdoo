@@ -49,10 +49,3 @@ class CustomCrmLead(models.Model):
                         pass
 
             super(CustomCrmLead, record).write(vals)
-
-            if vals.get('partner_id'):
-                try:
-                    record.action_assign_partner()
-                except:
-                    pass
-            return
