@@ -1,0 +1,55 @@
+<odoo>
+    <data>
+        <record id="bryntum_gantt__view_form" model="ir.ui.view">
+            <field name="name">bryntum_gantt_view_form</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <BryntumGantt>
+                </BryntumGantt>
+            </field>
+        </record>
+
+        <record id="project.act_project_project_2_project_task_all" model="ir.actions.act_window">
+            <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity,BryntumGantt,map</field>
+        </record>
+
+        <record id="project.action_view_task" model="ir.actions.act_window">
+            <field name="view_mode">kanban,tree,form,calendar,pivot,graph,gantt,activity</field>
+        </record>
+
+        <record id="project_task_view_form" model="ir.ui.view">
+            <field name="name">project_task_view_form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="assigned_ids" widget="many2many_tags"/>
+                    <field name="percent_done"/>
+                    <field name="duration"/>
+                    <field name="effort"/>
+                </xpath>
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <field name="scheduling_mode"/>
+                    <field name="constraint_type"/>
+                    <field name="constraint_date" widget="date"/>
+                    <field name="effort_driven"/>
+                    <field name="manually_scheduled"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="project_task_view_tree" model="ir.ui.view">
+            <field name="name">project_task_view_tree</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="percent_done"/>
+                    <field name="duration"/>
+                    <field name="assigned_ids" widget="many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
