@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+project_template_manager,project.template manager,project_from_template.model_project_template,project.group_project_manager,1,1,1,1
+project_template_task_manager,project.template.task manager,project_from_template.model_project_template_task,project.group_project_manager,1,1,1,1
