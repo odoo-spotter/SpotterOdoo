@@ -6,6 +6,18 @@
         <field name="model">helpdesk.ticket</field>
         <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='timesheet_ids']" position="before">
+                <field name="timesheet_timer_pause" invisible="1"/>
+                <button class="btn-primary" name="action_timer_start" type="object" string="Start Timer"
+                        attrs="{'invisible': [('timesheet_timer_start', '!=', False)]}"/>
+                <button class="btn-primary" name="action_timer_pause" type="object" string="Pause"
+                        attrs="{'invisible': ['|', ('timesheet_timer_pause', '!=', False), ('timesheet_timer_start', '=', False)]}"/>
+                <button class="btn-primary btn-info" name="action_timer_resume" type="object" string="Resume"
+                        attrs="{'invisible': ['|', ('timesheet_timer_pause', '=', False), ('timesheet_timer_start', '=', False)]}"/>
+                <button class="btn-primary btn-danger o_fsm_stop" name="action_timer_stop" type="object" string="Stop"
+                        attrs="{'invisible': [('timesheet_timer_start', '=', False)]}"/>
+                <field name="timesheet_timer_start" widget="timesheet_timer"  class="text-danger pull-right h2 mr-4 font-weight-bold" />
+            </xpath>
             <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
                 <button class="oe_stat_button" name="action_view_rma_receipts" icon="fa-truck"
                     type="object" attrs="{'invisible': [('x_repair_pickings_count', '=', 0)]}" > 

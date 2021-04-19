@@ -16,7 +16,8 @@
         'views/crm_lead_form.xml',
         'views/helpdesk_ticket_form.xml',
         'views/assets.xml',
-        'views/documents_document_form.xml'
+        'views/documents_document_form.xml',
+        'wizard/helpdesk_ticket_create_timesheet.xml'
     ],
     'application': True,
 }

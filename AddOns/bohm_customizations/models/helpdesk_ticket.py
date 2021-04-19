@@ -3,6 +3,7 @@ import logging
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
+from math import ceil
 
 _logger = logging.getLogger(__name__)
 
@@ -14,6 +15,13 @@ class CustomHelpdeskTicket(models.Model):
     x_repair_pickings_count = fields.Integer(
         'RMA Receipt Count', compute="_compute_rma_count")
     picking_ids = fields.Many2many('stock.picking', string="Return Orders")
+    timesheet_timer_start = fields.Datetime(
+        "Timesheet Timer Start", default=None)
+    timesheet_timer_pause = fields.Datetime("Timesheet Timer Last Pause")
+    timesheet_timer_first_start = fields.Datetime(
+        "Timesheet Timer First Use", readonly=True)
+    timesheet_timer_last_stop = fields.Datetime(
+        "Timesheet Timer Last Use", readonly=True)
 
     @api.depends('picking_ids')
     def _compute_rma_count(self):
@@ -88,3 +96,60 @@ class CustomHelpdeskTicket(models.Model):
             else:
                 move.picking_create_move(
                     picking_id,  self.product_id, 1, self.location_id, location_dest_id)
+
+    def action_timer_start(self):
+        self.ensure_one()
+        if not self.timesheet_timer_first_start:
+            self.write(
+                {'timesheet_timer_first_start': fields.Datetime.now()})
+
+        return self.write({'timesheet_timer_start': fields.Datetime.now()})
+
+    def action_timer_pause(self):
+        self.write({'timesheet_timer_pause': fields.Datetime.now()})
+
+    def action_timer_resume(self):
+        new_start = self.timesheet_timer_start + \
+            (fields.Datetime.now() - self.timesheet_timer_pause)
+        self.write({
+            'timesheet_timer_start': new_start,
+            'timesheet_timer_pause': False
+        })
+
+    def action_timer_stop(self):
+        self.ensure_one()
+        start_time = self.timesheet_timer_start
+        if start_time:
+            pause_time = self.timesheet_timer_pause
+            if pause_time:
+                start_time = start_time + (fields.Datetime.now() - pause_time)
+            minutes_spent = (fields.Datetime.now() -
+                             start_time).total_seconds() / 60
+            minutes_spent = self._timer_rounding(minutes_spent)
+            return self._action_create_timesheet(minutes_spent * 60 / 3600)
+        return False
+
+    def _timer_rounding(self, minutes_spent):
+        minimum_duration = int(self.env['ir.config_parameter'].sudo().get_param(
+            'sale_timesheet_enterprise.timesheet_min_duration', 0))
+        rounding = int(self.env['ir.config_parameter'].sudo().get_param(
+            'sale_timesheet_enterprise.timesheet_rounding', 0))
+        minutes_spent = max(minimum_duration, minutes_spent)
+        if rounding and ceil(minutes_spent % rounding) != 0:
+            minutes_spent = ceil(minutes_spent / rounding) * rounding
+        return minutes_spent
+
+    def _action_create_timesheet(self, time_spent):
+        return {
+            "name": _("Confirm Time Spent"),
+            "type": 'ir.actions.act_window',
+            "res_model": 'helpdesk.ticket.create.timesheet',
+            "views": [[False, "form"]],
+            "target": 'new',
+            "context": {
+                **self.env.context,
+                'active_id': self.id,
+                'active_model': 'helpdesk.ticket',
+                'default_time_spent': time_spent,
+            },
+        }
