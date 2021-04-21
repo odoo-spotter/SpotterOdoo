@@ -131,7 +131,14 @@ class CustomDocumentsDocument(models.Model):
         if self.x_original_version:
             file_load = self.name.rsplit('.', 1)
             if len(file_load) > 1:
-                self.name = self._origin.name + '.' + file_load[1]
+                old_file_type = self._origin.name.rsplit('.', 1)
+                if len(old_file_type) > 1:
+                    if file_load[1] == old_file_type[1]:
+                        self.name = self._origin.name
+                    else:
+                        self.name = old_file_type[0] + '.' + file_load[1]
+                else:
+                    self.name = self._origin.name + '.' + file_load[1]
             else:
                 self.name = self._origin.name
 

@@ -137,7 +137,7 @@ class CustomerPortal(CustomerPortal):
         if partner.commercial_partner_id not in attachment_id.partner_ids.commercial_partner_id and attachment_id.x_all_users != True:
             return request.redirect("/")
         values = {
-            'attachment': attachment_id,
+            'attachment': attachment_id
         }
         return request.render("document_directory_myaccount_portal.portal_attachment_page", values)    
 
