@@ -23,10 +23,7 @@
             <xpath expr="//button[@name='%(helpdesk_repair.action_repair_order_form)d']" position="replace">
                 <button name="action_repair_receive" type="object"
                     groups="stock.group_stock_user"
-                    string="Repair" attrs="{'invisible': ['|', ('use_product_repairs', '=', False), ('product_id', '=', False)]}" />
-                <button name="action_repair_receive" type="object"
-                    groups="stock.group_stock_user"
-                    string="Repair" attrs="{'invisible': ['|', ('use_product_repairs', '=', False), ('product_id', '!=', False)]}" confirm="It is recommended that you choose a product before continuing. Would you like to continue anyway?"/>
+                    string="Repair" attrs="{'invisible': [('use_product_repairs', '=', False)]}" />
             </xpath>            
         </field>
     </record>
