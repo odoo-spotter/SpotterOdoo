@@ -17,7 +17,7 @@ class CustomGoalsRepairOrder(models.Model):
         res = super(CustomGoalsRepairOrder, self).write(vals)
         for record in self:
             try:
-                if vals.get('state') == 'confirmed' and record.x_team_id:
+                if vals.get('state') in ['confirmed', '2binvoiced'] and record.x_team_id:
                     record.x_confirmed_date = datetime.datetime.now()
                     record.x_team_id.sudo().refresh_total()
                 if vals.get('x_team_id'):

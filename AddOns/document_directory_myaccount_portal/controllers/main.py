@@ -10,8 +10,11 @@ import copy
 from odoo import http, modules, SUPERUSER_ID
 from odoo import http
 from odoo.http import request
-from odoo.addons.portal.controllers.portal import CustomerPortal
+from odoo.addons.portal.controllers.portal import pager as portal_pager, CustomerPortal
 import logging
+from odoo.tools.translate import _
+from odoo.osv.expression import OR
+from odoo.addons.http_routing.models.ir_http import slug, unslug
 
 _logger = logging.getLogger(__name__)
 
@@ -63,19 +66,68 @@ class CustomerPortal(CustomerPortal):
         })
         return request.render("document_directory_myaccount_portal.portal_my_document_directory", values)
 
-    @http.route(['/my/directory_documents/<int:directory>'], type='http', auth="public", website=True)
-    def portal_directory_page(self, directory=None, access_token=None, **kw):
+    @http.route(['/my/directory_documents/<model("document.directory"):directory>', '/my/directory_documents/<model("document.directory"):directory>/page/<int:page>'], type='http', auth="public", website=True)
+    def portal_directory_page(self, directory=None, page=1, date_begin=None, date_end=None, access_token=None, sortby=None, search=None, search_in='all', **kw):
         user = request.env.user
-        directory_id = request.env['document.directory'].sudo().browse(directory)
-        
-        # if directory_id == request.env.ref('document_directory_myaccount_portal.menu_directory_other_document'):
-        #     attachment_ids = request.env['ir.attachment'].sudo().search([('partner_ids','in', user.partner_id.id)])
-        #     full_access_docs = request.env['ir.attachment'].sudo().search([('x_all_users', '=', True)])
-        # else:
-        attachment_ids = request.env['ir.attachment'].sudo().search([('directory_id','=',directory_id.id), ('partner_ids','in', user.partner_id.id)])
-        full_access_docs = request.env['ir.attachment'].sudo().search([('directory_id','=',directory_id.id), ('x_all_users', '=', True)])
-        
-        values = {'attachments': attachment_ids + full_access_docs, 'directory':directory_id}
+        directory_id = directory
+
+        searchbar_sortings = {
+            'date': {'label': _('Newest'), 'order': 'create_date desc'},
+            'date_old': {'label': _('Oldest'), 'order': 'create_date asc'},
+            'name': {'label': _('Name'), 'order': 'name'},
+        }
+
+        searchbar_inputs = {
+            'all': {'input': 'all', 'label': _('Search All Documents')},
+        }
+
+        if not sortby:
+            sortby = 'date'
+        order = searchbar_sortings[sortby]['order']
+
+        domain = ['|', ('x_all_users', '=', True), ('partner_ids', 'in',
+                                                    user.partner_id.id), ('directory_id', '=', directory_id.id)]
+        if date_begin and date_end:
+            domain += [('create_date', '>', date_begin),
+                       ('create_date', '<=', date_end)]
+
+        if search and search_in:
+            search_domain = []
+            if search_in in ('all'):
+                search_domain = OR([search_domain, [
+                                   '|', ('name', 'ilike', search), ('x_description', 'ilike', search)]])
+
+            domain += search_domain
+
+        attachments_count = request.env['ir.attachment'].search_count(domain)
+        url = "/my/directory_documents/" +slug(directory)
+        pager = portal_pager(
+            url=url,
+            url_args={'date_begin': date_begin,
+                      'date_end': date_end, 'sortby': sortby},
+            total=attachments_count,
+            page=page,
+            step=self._items_per_page
+        )
+
+        attachment_ids = request.env['ir.attachment'].sudo().search(
+            domain, order=order, limit=self._items_per_page, offset=pager['offset'])
+        request.session['my_documents_history'] = attachment_ids.ids[:100]
+
+        values = {
+            'date': date_begin,
+            'attachments': attachment_ids,
+            'page_name': 'document',
+            'default_url': '/my/directory_documents',
+            'pager': pager,
+            'directory': directory_id,
+            'searchbar_sortings': searchbar_sortings,
+            'searchbar_inputs': searchbar_inputs,
+            'sortby': sortby,
+            'search_in': search_in,
+            'search': search
+        }
+
         return request.render("document_directory_myaccount_portal.portal_my_directory_document", values)
     
     @http.route(['/my/directory_doc/<int:attachment>'], type='http', auth="public", website=True)
@@ -85,7 +137,7 @@ class CustomerPortal(CustomerPortal):
         if partner.commercial_partner_id not in attachment_id.partner_ids.commercial_partner_id and attachment_id.x_all_users != True:
             return request.redirect("/")
         values = {
-            'attachment': attachment_id,
+            'attachment': attachment_id
         }
         return request.render("document_directory_myaccount_portal.portal_attachment_page", values)    
 

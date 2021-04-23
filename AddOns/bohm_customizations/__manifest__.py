@@ -12,7 +12,11 @@
     'depends': ['repair'],
     'data': [
         'security/ir.model.access.csv',
-        'views/repair_order_form.xml'
+        'views/repair_order_form.xml',
+        'views/crm_lead_form.xml',
+        'views/helpdesk_ticket_form.xml',
+        'views/assets.xml',
+        'views/documents_document_form.xml'
     ],
     'application': True,
 }
