@@ -16,7 +16,8 @@
         'views/crm_lead_form.xml',
         'views/helpdesk_ticket_form.xml',
         'views/assets.xml',
-        'views/documents_document_form.xml'
+        'views/documents_document_form.xml',
+        'views/spotter_services.xml'
     ],
     'application': True,
 }

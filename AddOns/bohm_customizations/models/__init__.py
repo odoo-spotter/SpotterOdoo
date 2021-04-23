@@ -7,3 +7,4 @@ from . import res_partner
 from . import helpdesk_ticket
 from . import stock_picking
 from . import stock_move
+from . import spotter_services

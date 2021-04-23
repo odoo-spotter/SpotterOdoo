@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record model="ir.ui.view" id="bohm_customizations.spotter_services_form">
+        <field name="name">Spotter Services</field>
+        <field name="model">spotter.services</field>
+        <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="name" />
+                    <field name="daily_multiplier" />
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+     <record model="ir.ui.view" id="bohm_customizations.services_list">
+      <field name="name">Spotter Services</field>
+      <field name="model">spotter.services</field>
+      <field name="arch" type="xml">
+        <tree string="Spotter Services">
+          <field name="sequence" widget="handle"/>
+          <field name="name" />
+          <field name="daily_multiplier" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="bohm_customizations.services_window">
+      <field name="name">Spotter Services</field>
+      <field name="res_model">spotter.services</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="spotter_services_menu" action="bohm_customizations.services_window" name="Spotter Services" parent="sale.product_menu_catalog" />
+</odoo>
