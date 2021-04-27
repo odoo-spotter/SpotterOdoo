@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_rental_order" model="ir.sequence">
+            <field name="name">Sales Order</field>
+            <field name="code">RENTAL</field>
+            <field name="prefix">RENTAL</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
+

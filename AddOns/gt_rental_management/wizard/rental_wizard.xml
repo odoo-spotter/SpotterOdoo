@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="wizard_view_rental_wizard" model="ir.ui.view">
+        <field name="name">Rental Product Replace</field>
+        <field name="model">rental.wizard</field>
+        <field name="arch" type="xml">
+        	<form string="Rental Product Replace">
+       			<group>
+	            	<field name="rental_wizard_line">
+	            		<tree editable="bottom">
+	            			<field name="replace"/>
+		            		<field name="product_id" readonly="1"/>
+		            		<field name="serial_no"/>
+		            		<field name="product_uom_qty" string="Quantity"/>
+	            		</tree>
+	            	</field>
+	             </group>
+	             <group>
+	            	<field name="product_return_moves">
+	            		<tree editable="bottom">
+		            		<field name="product_id" domain="[('rental','=',True)]"/>
+		            		<field name="serial_no"/>
+		            		<field name="quantity"/>
+	            		</tree>
+	            	</field>
+	             </group>
+           	 <footer>
+                <button name="replace_product" type="object" string="Replace" class="oe_highlight"/>
+                		or
+                <button name="cancel" string="Cancel" special="cancel"/>
+              </footer>  
+           </form>
+         </field>
+       </record>
+       
+    <record id="action_rental_wizard" model="ir.actions.act_window">
+        <field name="name">Rental Product Replace</field>
+        <field name="res_model">rental.wizard</field>
+<!--        <field name="view_type">form</field>-->
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_view_rental_wizard"/>
+        <field name="target">new</field>
+    </record>
+    
+    
+   <record id="wizard_view_renew_rental" model="ir.ui.view">
+        <field name="name">Renew Rental</field>
+        <field name="model">renew.rental</field>
+        <field name="arch" type="xml">
+        	<form string="Renew Rental">
+        		<group>
+	            	<field name="new_entend_date"/>
+	             </group>
+           	 <footer>
+                <button name="renew_rental" type="object" string="Extend/Renew Rental" class="oe_highlight"/>
+                		or
+                <button name="cancel" string="Cancel" special="cancel"/>
+              </footer>  
+           </form>
+         </field>
+       </record>
+       
+    <record id="action_renew_rental_wizard" model="ir.actions.act_window">
+        <field name="name">Renew Rental</field>
+	<field name="type">ir.actions.act_window</field>
+        <field name="res_model">renew.rental</field>
+<!--        <field name="view_type">form</field>-->
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_view_renew_rental"/>
+        <field name="target">new</field>
+    </record>
+</odoo>   
+

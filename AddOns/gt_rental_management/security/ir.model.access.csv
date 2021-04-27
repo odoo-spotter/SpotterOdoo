@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rental_wizard,rental.wizard,model_rental_wizard,base.group_user,1,1,1,1
+access_rental_order_line,rental.order.line,model_rental_order_line,base.group_user,1,1,1,1
