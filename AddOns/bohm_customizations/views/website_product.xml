@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <template id="product" name="Product" track="1">
+        <t t-set="combination" t-value="product._get_first_possible_combination()"/>
+        <t t-set="combination_info" t-value="product._get_combination_info(combination, add_qty=add_qty or 1, pricelist=pricelist)"/>
+        <t t-set="product_variant" t-value="product.env['product.product'].browse(combination_info['product_id'])"/>
+
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="product.name" />
+            <div itemscope="itemscope" itemtype="http://schema.org/Product" id="wrap" class="js_sale">
+                <section t-attf-class="container py-2 oe_website_sale #{'discount' if combination_info['has_discounted_price'] else ''}" id="product_detail" t-att-data-view-track="view_track and '1' or '0'">
+                    <div class="row">
+                        
+                        <div class="col-md-6 col-xl-8 mt-4 ml-4" id="product_details">
+                            <h1 itemprop="name" t-field="product.name">Product Name</h1>
+                          
+                          
+                            <hr t-if="product.description_sale" />
+                            <div>
+                                <p t-field="product.description_sale" class="text-muted mt-3" placeholder="A short description that will also appear on documents." />
+                            </div>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-4 col-xl-3 mr-4">
+                            <t t-call="website_sale.shop_product_carousel"/>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <button class="tablinks" onclick="openTab(event, 'Overview')"><i class="fa fa-info-circle mr-2"/>Overview</button>
+                        <button class="tablinks" onclick="openTab(event, 'Manuals')"><i class="fa fa-align-justify mr-2"/>Manuals</button>
+                        <button class="tablinks" onclick="openTab(event, 'Images')"><i class="fa fa-image mr-2"/>Images</button>
+                    </div>
+                    <div id="Overview" class="tabcontent">
+                        <h3>Overview</h3>
+                    </div>
+
+                    <div id="Manuals" class="tabcontent">
+                        <h3>Manuals</h3>
+                    </div>
+
+                    <div id="Images" class="tabcontent">
+                        <h3>Images</h3>
+                    </div>
+                </section>
+                <div itemprop="description" t-field="product.website_description" class="oe_structure mt16" id="product_full_description" />
+            </div>
+        </t>
+
+        <script type="text/javascript">
+            function openTab(evt, tabName) {
+                let i,
+                tabcontent,
+                tablinks;
+                
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (let item of tabcontent) {
+                    item.style.display = "none";
+                }
+
+                
+                tablinks = document.getElementsByClassName("tablinks");
+                for (let item of tablinks) {
+                    item.className = item.className.replace(" active", "");
+                }
+
+                
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+        </script>
+
+        <style>
+            .tab {
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+            }
+
+
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+            }
+
+
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+
+            .tabcontent {
+                display: none;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-top: none;
+            }
+        </style>
+    </template>   
+</odoo>
