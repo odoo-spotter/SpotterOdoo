@@ -51,8 +51,9 @@ class CustomRepairOrder(models.Model):
             ])
 
             if return_receipt:
-                errors.append('- ' + str(return_receipt.name) +
-                              ' has not been received. Please receive this return to proceed with this repair.')
+                for receipt in return_receipt:
+                    errors.append('- ' + str(receipt.name) +
+                                  ' has not been received. Please receive this return to proceed with this repair.')
 
         if len(errors):
             msg = 'Please correct the following:\n'
