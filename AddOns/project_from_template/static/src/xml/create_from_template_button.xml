@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <templates id="template" xml:space="preserve">
+
+        <t t-name="ProjectFromTemplate.generate_project_button">
+            <button class="btn btn-secondary oe_create_project_from_template_action_button" type="button">
+                <t t-esc="_t('Create from template')"/>
+            </button>
+        </t>
+    
+        <t t-extend="KanbanView.buttons" t-name='CreateProjectFromTemplate.buttons'>
+            <t t-jquery="button" t-operation="after">
+                <t t-call="ProjectFromTemplate.generate_project_button"/>
+                <t t-js="ctx">
+                    if (window.odoo._modules.indexOf("base_import") >= 0) {
+                        r.push(context.engine.tools.call(context, 'ImportView.import_button', dict));
+                    };
+                </t>
+            </t>
+            
+            
+        </t>
+
+
+        
+   
+    
+    
+
+</templates>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="button_render_js" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script src="project_from_template/static/src/js/create_from_template_action_call.js" type="text/javascript"/>
+        </xpath>
+    </template>
+</odoo>
