@@ -28,6 +28,6 @@ class AccountBankStatementLine(models.Model):
                         'employee_id': employee_id,
                         'date': record.date,
                         'name': name,
-                        'payment_mode': company_account,
+                        'payment_mode': 'company_account',
                     }
                     record.env['hr.expense'].create(vals)
