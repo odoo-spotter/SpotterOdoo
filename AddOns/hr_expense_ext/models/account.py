@@ -16,6 +16,8 @@ class AccountBankStatementLine(models.Model):
     def action_create_expense(self):          
         for record in self:
             #verify employee is tied to journal
+            if record.journal_entry_ids:
+                raise UserError(_("One or more lines has already been reconciled. \nYou cannot create an expense record for statement lines that have already been reconciled."))
             if record.journal_id.employee_id:
                 employee_id = record.journal_id.employee_id
                 #Verify that the employee is still active
