@@ -21,3 +21,4 @@ class HrExpense(models.Model):
             account = self.product_id.product_tmpl_id._get_product_accounts()['expense']
             if account and self.is_editable:
                 self.account_id = account
+                
