@@ -21,7 +21,7 @@ class AccountBankStatementLine(models.Model):
                 #Verify that the employee is still active
                 if employee_id.active:
                     amount = record.amount * -1
-                    name = str(record.name) + " - " + str(record.journal_id.name) + " - " + str(amount)
+                    name = str(record.name) + " - " + str(record.journal_id.name) + " - For: " + str(amount)
                     vals = {
                         'unit_amount': amount,
                         'quantity': 1,
@@ -32,6 +32,6 @@ class AccountBankStatementLine(models.Model):
                     }
                     self.env['hr.expense'].create(vals)
                 else:
-                    raise UserError(_("One or more lines has an archived linked employee. \n Please ensure each journal has an employee properly configured and try again."))
+                    raise UserError(_("One or more lines has an archived linked employee. \nPlease verify that each journal has an employee properly configured and try again."))
             else:
-                raise UserError(_("One or more lines don't have an employee set on the linked journal. \n Please ensure each journal has an employee properly configured and try again."))
+                raise UserError(_("One or more lines don't have an employee set on the linked journal. \nPlease verify that each journal has an employee properly configured and try again."))
