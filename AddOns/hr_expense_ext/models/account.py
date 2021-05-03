@@ -16,8 +16,8 @@ class AccountBankStatementLine(models.Model):
     def action_create_expense(self):          
         for record in self:
             #verify employee is tied to journal
-            if record.journal_id.x_studio_employee_id:
-                employee_id = record.journal_id.x_studio_employee_id
+            if record.journal_id.employee_id:
+                employee_id = record.journal_id.employee_id
                 #Verify that the employee is still active
                 if employee_id.active:
                     amount = record.amount * -1
@@ -30,4 +30,4 @@ class AccountBankStatementLine(models.Model):
                         'name': name,
                         'payment_mode': 'company_account',
                     }
-                    record.env['hr.expense'].create(vals)
+                    self.env['hr.expense'].create(vals)
