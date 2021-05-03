@@ -17,7 +17,7 @@
         <field name="state">code</field>
         <field name="code">
             if records:
-                action = records.action_create_expense()
+                records.action_create_expense()
         </field>
     </record>
 </odoo>

@@ -25,7 +25,7 @@ class AccountBankStatementLine(models.Model):
                     vals = {
                         'unit_amount': amount,
                         'quantity': 1,
-                        'employee_id': employee_id,
+                        'employee_id': employee_id.id,
                         'date': record.date,
                         'name': name,
                         'payment_mode': 'company_account',
