@@ -31,3 +31,7 @@ class AccountBankStatementLine(models.Model):
                         'payment_mode': 'company_account',
                     }
                     self.env['hr.expense'].create(vals)
+                else:
+                    raise UserError(_("One or more lines has an archived linked employee. \n Please ensure each journal has an employee properly configured and try again."))
+            else:
+                raise UserError(_("One or more lines don't have an employee set on the linked journal. \n Please ensure each journal has an employee properly configured and try again."))
