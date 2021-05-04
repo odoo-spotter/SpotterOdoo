@@ -38,10 +38,6 @@ class CustomResPartner(models.Model):
         except:
             pass
     
-    def _invoice_total(self):
-        for record in self:
-            record.total_invoiced = 0
-
     @api.onchange('x_studio_vertical')
     def update_child_vertical(self):
         try:
